@@ -49,6 +49,7 @@ export default function ConfigurationPanel({
                 <SelectItem value="es">🇪🇸 Espanhol</SelectItem>
                 <SelectItem value="fr">🇫🇷 Francês</SelectItem>
                 <SelectItem value="de">🇩🇪 Alemão</SelectItem>
+                <SelectItem value="ru">🇷🇺 Russo</SelectItem>
               </SelectContent>
             </Select>
           </div>

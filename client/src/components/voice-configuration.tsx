@@ -13,8 +13,6 @@ interface VoiceConfigurationProps {
     useEdgeTTS: boolean;
     primaryVoice: string;
     secondaryVoice: string;
-    useCustomAudio: boolean;
-    customAudioPath: string;
   };
   onConfigurationChange: (config: any) => void;
 }
@@ -164,37 +162,7 @@ export default function VoiceConfiguration({
           </div>
         )}
         
-        {/* Custom Audio Option */}
-        <div className="p-4 bg-dark-bg rounded-lg border border-dark-border">
-          <div className="flex items-center mb-3 space-x-2">
-            <Checkbox
-              id="useCustomAudio"
-              checked={configuration.useCustomAudio}
-              onCheckedChange={(checked) => updateConfig('useCustomAudio', checked)}
-            />
-            <Label htmlFor="useCustomAudio" className="text-gray-300">
-              Usar áudio personalizado
-            </Label>
-          </div>
-          
-          {configuration.useCustomAudio && (
-            <div className="flex gap-2">
-              <Button 
-                className="bg-gray-700 hover:bg-gray-600"
-                onClick={handleCustomAudioSelect}
-              >
-                <Music className="w-4 h-4 mr-2" />
-                Selecionar Áudio
-              </Button>
-              <Input
-                value={configuration.customAudioPath}
-                placeholder="Nenhum áudio selecionado"
-                readOnly
-                className="bg-dark-surface border-dark-border text-gray-400"
-              />
-            </div>
-          )}
-        </div>
+
       </CardContent>
     </Card>
   );

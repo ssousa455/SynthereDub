@@ -42,8 +42,6 @@ export class MemStorage implements IStorage {
       primaryVoice: item.primaryVoice ?? "pt-BR-AntonioNeural",
       secondaryVoice: item.secondaryVoice ?? null,
       useEdgeTTS: item.useEdgeTTS ?? true,
-      useCustomAudio: item.useCustomAudio ?? false,
-      customAudioPath: item.customAudioPath ?? null,
       originalLanguage: item.originalLanguage ?? "en",
       targetLanguage: item.targetLanguage ?? "pt-BR",
       translator: item.translator ?? "google_batch",

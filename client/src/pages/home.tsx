@@ -5,6 +5,7 @@ import ConfigurationPanel from "@/components/configuration-panel";
 import VoiceConfiguration from "@/components/voice-configuration";
 import ProcessingControls from "@/components/processing-controls";
 import ProcessingLog from "@/components/processing-log";
+import SettingsModal from "@/components/settings-modal";
 import { useWebSocket } from "@/hooks/use-websocket";
 import { useQuery } from "@tanstack/react-query";
 import { QueueItem } from "@shared/schema";
@@ -13,6 +14,7 @@ import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [saveLocation, setSaveLocation] = useState("/home/usuario/Videos_Dublados/");
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const [configuration, setConfiguration] = useState({
     originalLanguage: "en",
     targetLanguage: "pt-BR",
@@ -21,8 +23,6 @@ export default function Home() {
     useEdgeTTS: true,
     primaryVoice: "pt-BR-AntonioNeural",
     secondaryVoice: "pt-BR-FranciscaNeural",
-    useCustomAudio: false,
-    customAudioPath: "",
   });
 
   const { data: queueItems = [], refetch } = useQuery<QueueItem[]>({
@@ -55,7 +55,12 @@ export default function Home() {
             <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
               <HelpCircle className="w-4 h-4" />
             </Button>
-            <Button variant="ghost" size="sm" className="text-gray-400 hover:text-white">
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className="text-gray-400 hover:text-white"
+              onClick={() => setSettingsOpen(true)}
+            >
               <Settings className="w-4 h-4" />
             </Button>
           </div>
@@ -97,6 +102,12 @@ export default function Home() {
             
           </div>
         </div>
+        
+        {/* Settings Modal */}
+        <SettingsModal 
+          open={settingsOpen} 
+          onOpenChange={setSettingsOpen}
+        />
       </div>
     </div>
   );

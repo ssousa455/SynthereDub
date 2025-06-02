@@ -15,11 +15,10 @@ export const queueItems = pgTable("queue_items", {
   primaryVoice: text("primary_voice").notNull().default("pt-BR-AntonioNeural"),
   secondaryVoice: text("secondary_voice"),
   useEdgeTTS: boolean("use_edge_tts").notNull().default(true),
-  useCustomAudio: boolean("use_custom_audio").notNull().default(false),
-  customAudioPath: text("custom_audio_path"),
+
   originalLanguage: text("original_language").notNull().default("en"),
   targetLanguage: text("target_language").notNull().default("pt-BR"),
-  translator: text("translator").notNull().default("gemini"),
+  translator: text("translator").notNull().default("google_batch"),
   speakerDetection: text("speaker_detection").notNull().default("auto"),
   errorMessage: text("error_message"),
   processingStarted: timestamp("processing_started"),
