@@ -7,7 +7,16 @@ export interface TranslationService {
 export class GoogleTranslatorService implements TranslationService {
   async translate(text: string, from: string, to: string): Promise<string> {
     try {
-      const result = await translate(text, { from, to });
+      // Fix language codes for Google Translate API
+      const toLang = to === 'pt-BR' ? 'pt' : to;
+      const fromLang = from === 'pt-BR' ? 'pt' : from;
+      
+      const result = await translate(text, { 
+        from: fromLang, 
+        to: toLang,
+        forceTo: true,
+        forceFrom: true
+      });
       return result.text;
     } catch (error) {
       throw new Error(`Translation failed: ${error instanceof Error ? error.message : 'Unknown error'}`);

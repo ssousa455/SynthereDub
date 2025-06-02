@@ -28,9 +28,8 @@ export default function FileSelection({
     mutationFn: async (files: FileList) => {
       const formData = new FormData();
       
-      for (let i = 0; i < files.length; i++) {
-        formData.append('videos', files[i]);
-      }
+      // Only upload the first file (single file mode)
+      formData.append('videos', files[0]);
       
       // Add configuration
       formData.append('configuration', JSON.stringify(configuration));
@@ -142,10 +141,10 @@ export default function FileSelection({
             >
               <CloudUpload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
               <p className="text-gray-400">
-                {isDragging ? 'Solte os vídeos aqui' : 'Clique ou arraste vídeos aqui'}
+                {isDragging ? 'Solte o vídeo aqui' : 'Clique ou arraste um vídeo aqui'}
               </p>
               <p className="text-xs text-gray-500 mt-1">
-                MP4, AVI, MKV, MOV, WMV, FLV, WebM
+                MP4, AVI, MKV, MOV, WMV, FLV, WebM (apenas um por vez)
               </p>
             </div>
             
@@ -155,13 +154,12 @@ export default function FileSelection({
               disabled={uploadMutation.isPending}
             >
               <FolderOpen className="w-4 h-4 mr-2" />
-              {uploadMutation.isPending ? 'Enviando...' : 'Selecionar Vídeos'}
+              {uploadMutation.isPending ? 'Enviando...' : 'Selecionar Vídeo'}
             </Button>
             
             <input
               ref={fileInputRef}
               type="file"
-              multiple
               accept="video/*,.mp4,.avi,.mkv,.mov,.wmv,.flv,.webm"
               onChange={handleFileChange}
               className="hidden"

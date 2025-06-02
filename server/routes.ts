@@ -256,37 +256,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     });
   });
 
-  // File upload endpoint
-  app.post('/api/upload', upload.array('videos'), async (req, res) => {
+  // File upload endpoint (single file only)
+  app.post('/api/upload', upload.single('videos'), async (req, res) => {
     try {
-      const files = req.files as Express.Multer.File[];
-      if (!files || files.length === 0) {
+      const file = req.file as Express.Multer.File;
+      if (!file) {
         return res.status(400).json({ error: "Nenhum arquivo enviado" });
       }
+
+      // Clear existing queue first (one video at a time)
+      await storage.clearQueue();
 
       const configuration = JSON.parse(req.body.configuration || '{}');
       const saveLocation = req.body.saveLocation || '/tmp/output';
 
-      let addedCount = 0;
+      const queueItem = insertQueueItemSchema.parse({
+        fileName: file.originalname,
+        originalPath: file.path,
+        outputPath: path.join(saveLocation, `dubbed_${file.originalname}`),
+        fileSize: file.size,
+        ...configuration
+      });
 
-      for (const file of files) {
-        try {
-          const queueItem = insertQueueItemSchema.parse({
-            fileName: file.originalname,
-            originalPath: file.path,
-            outputPath: path.join(saveLocation, `dubbed_${file.originalname}`),
-            fileSize: file.size,
-            ...configuration
-          });
-
-          await storage.addQueueItem(queueItem);
-          addedCount++;
-        } catch (error) {
-          console.error(`Failed to add ${file.originalname} to queue:`, error);
-          // Clean up uploaded file
-          await fs.unlink(file.path).catch(() => {});
-        }
-      }
+      await storage.addQueueItem(queueItem);
+      const addedCount = 1;
 
       // Broadcast queue update
       broadcastMessage({

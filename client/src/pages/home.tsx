@@ -70,30 +70,34 @@ export default function Home() {
         <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
           <div className="max-w-4xl mx-auto space-y-6">
             
-            <FileSelection 
-              saveLocation={saveLocation}
-              onSaveLocationChange={setSaveLocation}
-              configuration={configuration}
-              onRefetch={refetch}
-            />
-            
-            <ConfigurationPanel 
-              configuration={configuration}
-              onConfigurationChange={setConfiguration}
-            />
-            
-            <VoiceConfiguration 
-              configuration={configuration}
-              onConfigurationChange={setConfiguration}
-            />
-            
-            <ProcessingControls 
-              queueItems={queueItems}
-              isProcessing={isProcessing}
-              processingItems={processingItems}
-              completedItems={completedItems}
-              onRefetch={refetch}
-            />
+            {queueItems.length === 0 ? (
+              <>
+                <FileSelection 
+                  saveLocation={saveLocation}
+                  onSaveLocationChange={setSaveLocation}
+                  configuration={configuration}
+                  onRefetch={refetch}
+                />
+                
+                <ConfigurationPanel 
+                  configuration={configuration}
+                  onConfigurationChange={setConfiguration}
+                />
+                
+                <VoiceConfiguration 
+                  configuration={configuration}
+                  onConfigurationChange={setConfiguration}
+                />
+              </>
+            ) : (
+              <ProcessingControls 
+                queueItems={queueItems}
+                isProcessing={isProcessing}
+                processingItems={processingItems}
+                completedItems={completedItems}
+                onRefetch={refetch}
+              />
+            )}
             
             <ProcessingLog 
               logs={logs}

@@ -153,8 +153,13 @@ export default function QueueSidebar({ queueItems, onRefetch }: QueueSidebarProp
                     {item.fileName}
                   </h4>
                   <p className="text-xs text-gray-400 mt-1">
-                    {formatFileSize(item.fileSize)}
+                    {formatFileSize(item.fileSize || 0)}
                   </p>
+                  <div className="text-xs text-gray-500 mt-1 space-y-1">
+                    <div>{item.originalLanguage} → {item.targetLanguage}</div>
+                    <div>{item.speakerDetection === 'single' ? 'Locutor único' : item.speakerDetection === 'multiple' ? 'Múltiplos locutores' : 'Detecção automática'}</div>
+                    <div>Voz: {item.primaryVoice.replace('pt-BR-', '').replace('Neural', '')}</div>
+                  </div>
                 </div>
                 <span className={`px-2 py-1 rounded text-xs font-medium ${getStatusBg(item.status)} text-black`}>
                   {getStatusText(item.status)}
