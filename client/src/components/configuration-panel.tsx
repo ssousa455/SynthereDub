@@ -80,8 +80,9 @@ export default function ConfigurationPanel({
                 <SelectValue />
               </SelectTrigger>
               <SelectContent className="bg-dark-surface border-dark-border">
-                <SelectItem value="gemini">Google Gemini</SelectItem>
-                <SelectItem value="openai">OpenAI GPT</SelectItem>
+                <SelectItem value="google_batch">Google Translator (Gratuito)</SelectItem>
+                <SelectItem value="gemini">Google Gemini (API)</SelectItem>
+                <SelectItem value="openai">OpenAI GPT (API)</SelectItem>
               </SelectContent>
             </Select>
           </div>

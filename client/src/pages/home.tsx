@@ -16,7 +16,7 @@ export default function Home() {
   const [configuration, setConfiguration] = useState({
     originalLanguage: "en",
     targetLanguage: "pt-BR",
-    translator: "gemini",
+    translator: "google_batch",
     speakerDetection: "auto",
     useEdgeTTS: true,
     primaryVoice: "pt-BR-AntonioNeural",

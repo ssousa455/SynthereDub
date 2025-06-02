@@ -31,11 +31,29 @@ export class MemStorage implements IStorage {
   async addQueueItem(item: InsertQueueItem): Promise<QueueItem> {
     const id = this.currentQueueId++;
     const queueItem: QueueItem = {
-      ...item,
-      id,
-      createdAt: new Date(),
+      fileName: item.fileName,
+      originalPath: item.originalPath,
+      outputPath: item.outputPath ?? null,
+      status: item.status ?? "waiting",
+      progress: item.progress ?? 0,
+      currentStep: item.currentStep ?? "Aguardando processamento",
+      fileSize: item.fileSize ?? null,
+      duration: item.duration ?? null,
+      primaryVoice: item.primaryVoice ?? "pt-BR-AntonioNeural",
+      secondaryVoice: item.secondaryVoice ?? null,
+      useEdgeTTS: item.useEdgeTTS ?? true,
+      useCustomAudio: item.useCustomAudio ?? false,
+      customAudioPath: item.customAudioPath ?? null,
+      originalLanguage: item.originalLanguage ?? "en",
+      targetLanguage: item.targetLanguage ?? "pt-BR",
+      translator: item.translator ?? "google_batch",
+      speakerDetection: item.speakerDetection ?? "auto",
+      errorMessage: item.errorMessage ?? null,
       processingStarted: null,
       processingCompleted: null,
+      metadata: item.metadata ?? null,
+      id,
+      createdAt: new Date(),
     };
     
     this.queueItems.set(id, queueItem);
@@ -61,11 +79,11 @@ export class MemStorage implements IStorage {
     this.queueItems.delete(id);
     
     // Remove associated logs
-    for (const [logId, log] of this.processingLogs.entries()) {
-      if (log.queueItemId === id) {
-        this.processingLogs.delete(logId);
-      }
-    }
+    const logsToDelete = Array.from(this.processingLogs.entries())
+      .filter(([, log]) => log.queueItemId === id)
+      .map(([logId]) => logId);
+    
+    logsToDelete.forEach(logId => this.processingLogs.delete(logId));
   }
 
   async clearQueue(): Promise<void> {
@@ -81,8 +99,10 @@ export class MemStorage implements IStorage {
   async addProcessingLog(log: InsertProcessingLog): Promise<ProcessingLog> {
     const id = this.currentLogId++;
     const processingLog: ProcessingLog = {
-      ...log,
       id,
+      queueItemId: log.queueItemId ?? null,
+      level: log.level ?? "info",
+      message: log.message,
       timestamp: new Date(),
     };
     
@@ -97,7 +117,11 @@ export class MemStorage implements IStorage {
       return logs.filter(log => log.queueItemId === queueItemId);
     }
     
-    return logs.sort((a, b) => a.timestamp.getTime() - b.timestamp.getTime());
+    return logs.sort((a, b) => {
+      const timeA = a.timestamp?.getTime() || 0;
+      const timeB = b.timestamp?.getTime() || 0;
+      return timeA - timeB;
+    });
   }
 }
 
